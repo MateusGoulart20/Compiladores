@@ -33,7 +33,7 @@ public class Lexico {
                     tipo = confirmId(corte);
                 }
                 resposta = addResposta(tipo);
-                System.out.println("[" + resposta + ": coluna = " + (base + 1) + ", linha = " + linha + "]");
+                System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
                 base = i;
                 i--;
                 ponta = 0;
@@ -49,7 +49,7 @@ public class Lexico {
             tipo = confirmId(corte);
         }
         resposta = addResposta(tipo);
-        System.out.println("[" + resposta + ": coluna = " + (base + 1) + ", linha = " + linha + "]");
+        System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
 
         return resposta;
     }
