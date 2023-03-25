@@ -34,6 +34,7 @@ public class Lexico {
                 }
                 resposta = addResposta(tipo);
                 System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
+                Compilador.addListToken(tipo);
                 base = i;
                 i--;
                 ponta = 0;
@@ -50,7 +51,7 @@ public class Lexico {
         }
         resposta = addResposta(tipo);
         System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
-
+        Compilador.addListToken(tipo);
         return resposta;
     }
 
