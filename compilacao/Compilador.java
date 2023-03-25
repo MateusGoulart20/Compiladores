@@ -2,21 +2,18 @@
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
+import java.util.ArrayList;
 
 public class Compilador {
-    static final int token_length = 200;
-    static int[] token_list = new int[token_length];
+    static private ArrayList<Integer> tokenList = new ArrayList<Integer>();
 
     public static void main(String[] args) {
-        // ini(); // inicializando o a lista de tokens. java já limpa o vetor
 
         System.out.println("Number of Command Line Argument = " + args.length);
         if (args.length == 0)
             return;
-        
-        
 
-        File arquivoFonte = new File(args[0]);
+        File arquivoFonte = new File(args[0]); // Pega a primeira localização de item.
         // File arquivoFonte = new File("texto.txt");
         if (arquivoFonte.exists()) {
             System.out.println("Arquivo Encontrado");
@@ -29,7 +26,7 @@ public class Compilador {
                     String data = myReader.nextLine();
                     linha++;
                     // w(Integer.toString(linha));
-                    Lexico.analise(data, linha);
+                    Lexico.analise(data, linha, tokenList);
                     // System.out.println(mensagem);
 
                 }
@@ -44,8 +41,14 @@ public class Compilador {
         } else {
             System.out.println("Arquivo Não Encontrado");
         }
+        /*
+         * System.out.println(tokenList.get(0));
+         * for (int i : tokenList) {
+         * System.out.println("+"+i);
+         * }
+         * está funcionando já
+         */
 
-        System.out.println(token_list.toString());
     }
 
     public static void w(String a) {
@@ -58,11 +61,4 @@ public class Compilador {
       * }
       * }
       */
-
-    public static void addListToken(int tipo) {
-        int i = 0;
-        while (token_list[i] != 0)
-            i++;
-        token_list[i] = tipo;
-    }
 }
