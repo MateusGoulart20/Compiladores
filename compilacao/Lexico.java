@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 public class Lexico {
     // Tokens
-    public static String analise(String entrada, int linha, ArrayList<Integer> tokenList) {
+    public static String analise(String entrada, int linha, ArrayList<Integer> tokenList, boolean lt) {
         int length = entrada.length(), // tamanho da string a ser analisada
                 i = 0, // iterador zerado
                 base = 0, // comeco do token
@@ -33,6 +33,7 @@ public class Lexico {
                     tipo = confirmId(corte);
                 }
                 resposta = addResposta(tipo);
+                if(lt) // habilitacao de impressao
                 System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
                 tokenList.add(tipo);
                 base = i;
@@ -50,6 +51,7 @@ public class Lexico {
             tipo = confirmId(corte);
         }
         resposta = addResposta(tipo);
+        if(lt) // habilitacao de impressao
         System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
         tokenList.add(tipo);
         return resposta;

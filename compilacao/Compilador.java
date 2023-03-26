@@ -5,31 +5,40 @@ import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.ArrayList;
 
 public class Compilador {
-    static private ArrayList<Integer> tokenList = new ArrayList<Integer>();
+    static private boolean lt = false;
+    static private boolean ls = false;
 
     public static void main(String[] args) {
+        System.out.println("Comando reconhecidos = " + args.length);
+        int arquivosReconhecidos = parametrosCompilacao(args);
+        System.out.println("Arquivos fontes reconhecidos = " + arquivosReconhecidos);
 
-        System.out.println("Number of Command Line Argument = " + args.length);
         if (args.length == 0)
             return;
+        for (String i : args)
+            if (arquivoExistente(i))
+                compilar(i);
+    }
 
-        File arquivoFonte = new File(args[0]); // Pega a primeira localização de item.
-        // File arquivoFonte = new File("texto.txt");
-        if (arquivoFonte.exists()) {
+    private static void compilar(String argumento) {
+        ArrayList<Integer> tokenList = new ArrayList<Integer>();
+
+        File arquivoFonte = new File(argumento); // Pega a primeira localização de item.
+        if (arquivoFonte.exists()) { // existe portanto executa o código
             System.out.println("Arquivo Encontrado");
             try {
                 Scanner myReader = new Scanner(arquivoFonte);
                 int linha = 0;
-                // String mensagem;
-                // w("inside");
                 while (myReader.hasNextLine()) {
+                    if(lt){
+                        System.out.println("Iniciado fase Lexica");
+                    }
                     String data = myReader.nextLine();
                     linha++;
-                    // w(Integer.toString(linha));
-                    Lexico.analise(data, linha, tokenList);
-                    // System.out.println(mensagem);
-
+                    Lexico.analise(data, linha, tokenList, lt);
                 }
+
+                Sintatico.analise(tokenList, ls);
                 myReader.close();
             } catch (FileNotFoundException e) {
                 System.out.println("File Not Found Exception");
@@ -37,28 +46,33 @@ public class Compilador {
             } finally {
                 System.out.println("Executado");
             }
-
-        } else {
-            System.out.println("Arquivo Não Encontrado");
         }
-        /*
-         * System.out.println(tokenList.get(0));
-         * for (int i : tokenList) {
-         * System.out.println("+"+i);
-         * }
-         * está funcionando já
-         */
-
     }
 
-    public static void w(String a) {
-        System.out.println(a);
-    }/*
-      * public static void ini(){
-      * int i;
-      * for(i=0; i<token_length; i++){
-      * System.out.println(token_list[i]);
-      * }
-      * }
-      */
+    private static int parametrosCompilacao(String[] argumentos) {
+        int i = 0;
+        for (String argumento : argumentos) {
+            if (argumento.equals("-lt"))
+                lt = true;
+            if (argumento.equals("-ls"))
+                ls = true;
+            if (argumento.equals("-tudo")) {
+                lt = true;
+                ls = true;
+            }
+
+            if (arquivoExistente(argumento)) {
+                i++;
+            }
+        }
+        return i;
+    }
+
+    private static boolean arquivoExistente(String argumento) {
+        File arquivoFonte = new File(argumento); // Pega a primeira localização de item.
+        if (arquivoFonte.exists())
+            return true; // existe portanto executa o código
+        return false;
+    }
+
 }
