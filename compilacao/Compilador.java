@@ -21,7 +21,7 @@ public class Compilador {
     }
 
     private static void compilar(String argumento) {
-        ArrayList<Integer> tokenList = new ArrayList<Integer>();
+        ArrayList<String> tokenList = new ArrayList<String>();
 
         File arquivoFonte = new File(argumento); // Pega a primeira localização de item.
         if (arquivoFonte.exists()) { // existe portanto executa o código
@@ -29,16 +29,16 @@ public class Compilador {
             try {
                 Scanner myReader = new Scanner(arquivoFonte);
                 int linha = 0;
+                if (lt) {
+                    System.out.println("Iniciado fase Lexica");
+                }
                 while (myReader.hasNextLine()) {
-                    if(lt){
-                        System.out.println("Iniciado fase Lexica");
-                    }
                     String data = myReader.nextLine();
                     linha++;
-                    Lexico.analise(data, linha, tokenList, lt);
+                    Lexico.analise(data, linha, tokenList);
                 }
 
-                Sintatico.analise(tokenList, ls);
+                Sintatico.analise(tokenList);
                 myReader.close();
             } catch (FileNotFoundException e) {
                 System.out.println("File Not Found Exception");
@@ -65,6 +65,8 @@ public class Compilador {
                 i++;
             }
         }
+        Lexico.lt(lt);
+        Sintatico.ls(ls);
         return i;
     }
 

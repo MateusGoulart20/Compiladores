@@ -1,6 +1,6 @@
 write "entre com alguma coisa";
-read algumaCoisa;
-if algumaCoisa < 458+xt*((v)) {
+read algumacoisa;
+if algumacoisa < 458+xt*((v)) {
  write "banana";
 }else{
  write "couve flor";
