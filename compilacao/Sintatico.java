@@ -41,7 +41,6 @@ public class Sintatico {
                 if(erro)return;
                 tratamento(i);
             }
-            w("Igual e retirado");
             x++;
         }
         w("Finalizando com:"+pilha.peek());
