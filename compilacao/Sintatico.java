@@ -31,24 +31,41 @@ public class Sintatico {
         pilha.pop();
     }
 
-    public static void analise(ArrayList<String> tokenList) {
+    private static void inesperado(String terminal, Token token) {
+        w("Erro na linha[" + token.linha + "] e coluna[" + token.coluna + "]\n  " + terminal + " : Nao esperava "
+                + token.token);
+        erro = true;
+    }
+    private static void inesperado(Token token) {
+        w("Erro na linha[" + token.linha + "] e coluna[" + token.coluna + "]\n  " + token.token + " : Inesperado ");
+        erro = true;
+    }
+
+    public static void analise(ArrayList<Token> entrada) {
+        ArrayList<Token> tokenList = new ArrayList<Token>();
+        for (Token pas : entrada) {
+            tokenList.add(pas);
+        }
         empilha("$");
         empilha("<PROGRAM>");
         int x = 1;
-        for (String i : tokenList) {
-            w("   #Posicao : "+x+ " #Topo: "+pilha.peek()+" #Entrada na lista: "+i);
-            while (compara(i)){
-                if(erro)return;
-                tratamento(i);
+        for (Token token : tokenList) {
+            String i = token.token;
+            w("   #Posicao : " + x + " #Topo: " + pilha.peek() + " #Entrada na lista: " + i);
+            while (compara(i)) {
+                if (erro)
+                    return;
+                tratamento(token);
             }
             x++;
         }
-        w("Finalizando com:"+pilha.peek());
+        w("Finalizando com:" + pilha.peek());
         desempilha();
         w(pilha.peek());
     }
 
-    private static void tratamento(String token) {
+    private static void tratamento(Token i) {
+        String token = i.token;
         switch (pilha.peek()) {
             case "<PROGRAM>":
                 switch (token) {
@@ -61,7 +78,7 @@ public class Sintatico {
                         procedimento(0);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<STMT_LIST>":
@@ -78,7 +95,7 @@ public class Sintatico {
                         procedimento(1);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<STMT>":
@@ -99,8 +116,7 @@ public class Sintatico {
                         procedimento(7);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
-                        erro = true;
+                        inesperado(pilha.peek(), i);
                         return;
                 }
 
@@ -113,7 +129,7 @@ public class Sintatico {
                         procedimento(25);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<mensagem>":
@@ -131,7 +147,7 @@ public class Sintatico {
                         procedimento(30);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<string>":
@@ -143,7 +159,7 @@ public class Sintatico {
                         procedimento(27);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<math_pointer>":
@@ -158,7 +174,7 @@ public class Sintatico {
                     case "unary":
                         procedimento(8);
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<math_unary>":
@@ -171,7 +187,7 @@ public class Sintatico {
                         procedimento(12);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<math_binary>":
@@ -184,7 +200,7 @@ public class Sintatico {
                         procedimento(14);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<math_openP>":
@@ -200,7 +216,7 @@ public class Sintatico {
                         procedimento(17);
                         return;
                     default:
-                        w(pilha.peek() + ": não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<math_operando>":
@@ -220,8 +236,7 @@ public class Sintatico {
                         procedimento(19);
                         return;
                     default:
-                        w(pilha.peek() + " não espera " + token);
-                        erro = true;
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<math_closeP>":
@@ -238,7 +253,7 @@ public class Sintatico {
                         procedimento(23);
                         return;
                     default:
-                        w(pilha.peek() + " não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<condicional_exp>":
@@ -250,7 +265,7 @@ public class Sintatico {
                         procedimento(32);
                         return;
                     default:
-                        w(pilha.peek() + " não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<condicional_se>":
@@ -259,7 +274,7 @@ public class Sintatico {
                         procedimento(33);
                         return;
                     default:
-                        w(pilha.peek() + " não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<condicional_else>":
@@ -271,7 +286,7 @@ public class Sintatico {
                         procedimento(34);
                         return;
                     default:
-                        w(pilha.peek() + " não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             case "<loop_while>":
@@ -280,18 +295,17 @@ public class Sintatico {
                         procedimento(36);
                         return;
                     default:
-                        w(pilha.peek() + " não espera " + token);
+                        inesperado(pilha.peek(), i);
                         return;
                 }
             default:
-                w(token + ":  nao eh um terminal reconhecido");
-                erro = true;
+            inesperado(i);
                 return;
         }
     }
 
     private static void procedimento(int entrada) {
-        w(" &Procedimento: "+entrada);
+        w(" &Procedimento: " + entrada);
         switch (entrada) {
             case 0:
                 desempilha();

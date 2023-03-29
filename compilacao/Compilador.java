@@ -6,8 +6,7 @@ import java.util.ArrayList;
 
 public class Compilador {
     static private boolean lt = false;
-    static private boolean ls = false;
-
+    static private boolean ls = false; 
     public static void main(String[] args) {
         System.out.println("Comando reconhecidos = " + args.length);
         int arquivosReconhecidos = parametrosCompilacao(args);
@@ -21,7 +20,7 @@ public class Compilador {
     }
 
     private static void compilar(String argumento) {
-        ArrayList<String> tokenList = new ArrayList<String>();
+        ArrayList<Token> tokenList = new ArrayList<Token>();
 
         File arquivoFonte = new File(argumento); // Pega a primeira localização de item.
         if (arquivoFonte.exists()) { // existe portanto executa o código

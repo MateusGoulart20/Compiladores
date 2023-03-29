@@ -2,11 +2,16 @@ import java.util.ArrayList;
 public class Lexico {
     // Tokens
     private static boolean lt;
+
     public static void lt(boolean entrada){
         lt=entrada;
     }
+    public static void w(String entrada) {
+        if (lt)
+            System.out.println(entrada);
+    }
 
-    public static String analise(String entrada, int linha, ArrayList<String> tokenList) {
+    public static String analise(String entrada, int linha, ArrayList<Token> tokenList) {
         int length = entrada.length(), // tamanho da string a ser analisada
                 i = 0, // iterador zerado
                 base = 0, // comeco do token
@@ -38,9 +43,8 @@ public class Lexico {
                     tipo = confirmId(corte);
                 }
                 resposta = addResposta(tipo);
-                if(lt) // habilitacao de impressao
-                System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
-                tokenList.add(resposta);
+                w("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
+                tokenList.add(new Token(resposta, linha, base+1));
                 base = i;
                 i--;
                 ponta = 0;
@@ -56,9 +60,8 @@ public class Lexico {
             tipo = confirmId(corte);
         }
         resposta = addResposta(tipo);
-        if(lt) // habilitacao de impressao
-        System.out.println("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
-        tokenList.add(resposta);
+        w("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
+        tokenList.add(new Token(resposta, linha, base+1));
         return resposta;
     }
 
@@ -105,21 +108,13 @@ public class Lexico {
                     return 4;
                 return -1;
             case 4:
-                return -1;
             case 5:
-                return -1;
             case 6:
-                return -1;
             case 20:
-                return -1;
             case 21:
-                return -1;
             case 22:
-                return -1;
             case 23:
-                return -1;
             case 24:
-                return -1;
             case 25:
                 return -1;
             default:
@@ -200,7 +195,6 @@ public class Lexico {
                 return "error[" + tipo + "]";
         }
     }
-
     // analisa se o id é uma palavra reservada
     private static int confirmId(String entrada) {
         if (entrada.equals("read"))
@@ -214,101 +208,5 @@ public class Lexico {
         if (entrada.equals("while"))
             return 15;
         return 1;
-    }
-
-    /*
-     * Tokens
-     * tipos:
-     * 1 id,
-     * 11 read
-     * 12 write
-     * 13 if
-     * 14 else
-     * 15 while
-     * 2 number,
-     * 3 atribute
-     * 4 condicao
-     * 5 unary,
-     * 6 binary
-     *//*
-        * /
-        * id: {L} ( {L} | {D} )*
-        * read = id: "read"
-        * write = id: "write"
-        * if = id: "if"
-        * else = id: "else"
-        * while = id: "while"
-        * atribute: "="
-        * number: {D}+
-        * condicao: "<" | "=="
-        * unary: "-" | "+"
-        * binary: "*" | "/"
-        */
-
-    /*
-     * Não terminais
-     * <PROGRAM>
-     * <STMT_LIST>
-     * <STMT>
-     * 
-     * <operando>
-     * <unary>
-     * <binary>
-     * 
-     * <mensagem>
-     * 
-     * <string>
-     * 
-     * <TERMO>
-     * 
-     * 
-     * 
-     * <math_pointer>
-     * <math_unary>
-     * <math_binary>
-     * <math_openP>
-     * <math_operando>
-     * <math_closeP>
-     * 
-     * <condicional_exp>
-     * <condicional_se>
-     * <condicional_else>
-     * 
-     * <loop_while>
-     */
-    /*
-     * Gramática
-     * <PROGRAM> ::= <STMT_LIST>;
-     * <STMT_LIST> ::= <STMT> ";" <STMT_LIST> | î;
-     * <STMT> ::= read id
-     * | write <mensagem>
-     * | id atribute <math_pointer>
-     * | <condicional_se>
-     * | <loop_while>;
-     * 
-     * <math_pointer> ::= unary <math_unary> | openP <math_openP> | <operando>
-     * <math_operando>;
-     * <math_unary> ::= openP <math_openP> | <operando> <math_operando>;
-     * <math_binary> ::= openP <math_openP> | <operando> <math_operando>;
-     * <math_openP> ::= openP <math_openP> | <operando> <math_operando> | unary
-     * <math_unary>;
-     * <math_operando> ::= unary <math_unary> | binary <math_binary> | closeP
-     * <math_closeP> | î;
-     * <math_closeP> ::= closeP <math_closeP> | binary <math_binary> | î;
-     * 
-     * <operando> ::= number | id;
-     * <string> ::= id <string> | î;
-     * <mensagem> ::= aspas <string> aspas | <operando>;
-     * 
-     * <condicional_exp> ::= <math_pointer> condicao <math_pointer>;
-     * <condicional_se> ::= if <condicional_exp> "{" <STMT_LIST> "}"
-     * <condicional_else>;
-     * <condicional_else> ::= else "{" <STMT_LIST> "}" |î;
-     * 
-     * <loop_while> ::= while <condicional_exp> "{" <STMT_LIST> "}";
-     */
-
-    public static void w(String a) {
-        System.out.println(a);
     }
 }
