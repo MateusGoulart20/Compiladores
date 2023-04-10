@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 public class Compilador {
     static private boolean lt = false;
-    static private boolean ls = false; 
+    static private boolean ls = false;
+    static private boolean lse = false;
+
     public static void main(String[] args) {
         System.out.println("Comando reconhecidos = " + args.length);
         int arquivosReconhecidos = parametrosCompilacao(args);
@@ -39,6 +41,10 @@ public class Compilador {
 
                 Sintatico.analise(tokenList);
                 myReader.close();
+
+                Sematico.analise(tokenList);
+                if (Sematico.erro)
+                    System.out.println("Sematico erro");
             } catch (FileNotFoundException e) {
                 System.out.println("File Not Found Exception");
                 e.printStackTrace();
@@ -55,9 +61,12 @@ public class Compilador {
                 lt = true;
             if (argumento.equals("-ls"))
                 ls = true;
+            if (argumento.equals("-lse"))
+                lse = true;
             if (argumento.equals("-tudo")) {
                 lt = true;
                 ls = true;
+                lse = true;
             }
 
             if (arquivoExistente(argumento)) {
@@ -66,6 +75,7 @@ public class Compilador {
         }
         Lexico.lt(lt);
         Sintatico.ls(ls);
+        Sematico.lse(lse);
         return i;
     }
 

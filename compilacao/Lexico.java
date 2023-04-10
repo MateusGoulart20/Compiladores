@@ -44,7 +44,7 @@ public class Lexico {
                 }
                 resposta = addResposta(tipo);
                 w("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
-                tokenList.add(new Token(resposta, linha, base+1));
+                tokenList.add(new Token(resposta, linha, base+1, entrada.substring(base, i)));
                 base = i;
                 i--;
                 ponta = 0;
@@ -61,7 +61,7 @@ public class Lexico {
         }
         resposta = addResposta(tipo);
         w("(TOKEN:" + resposta + ", LEXEMA:"+entrada.substring(base, i)+", LINHA:" + linha +", COLUNA:"+(base+1)+")");
-        tokenList.add(new Token(resposta, linha, base+1));
+        tokenList.add(new Token(resposta, linha, base+1, entrada.substring(base, i)));
         return resposta;
     }
 
