@@ -8,6 +8,7 @@ public class Compilador {
     static private boolean lt = false;
     static private boolean ls = false;
     static private boolean lse = false;
+    static private boolean ts = false;
 
     public static void main(String[] args) {
         System.out.println("Comando reconhecidos = " + args.length);
@@ -63,10 +64,13 @@ public class Compilador {
                 ls = true;
             if (argumento.equals("-lse"))
                 lse = true;
+            if(argumento.equals("-ts"))
+                ts = true;
             if (argumento.equals("-tudo")) {
                 lt = true;
                 ls = true;
                 lse = true;
+                ts = true;
             }
 
             if (arquivoExistente(argumento)) {
@@ -76,6 +80,7 @@ public class Compilador {
         Lexico.lt(lt);
         Sintatico.ls(ls);
         Sematico.lse(lse);
+        Sematico.ts(ts);
         return i;
     }
 

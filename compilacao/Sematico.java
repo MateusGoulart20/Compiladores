@@ -1,17 +1,23 @@
 import java.util.ArrayList;
 
 public class Sematico {
-    private static boolean lse;
+    private static boolean lse, ts;
     public static boolean erro;
     private static ArrayList<PalavraValor> declaradas = new ArrayList<PalavraValor>();;
 
     public static void lse(boolean entrada) { // impoe a opcao selecionada
         lse = entrada;
     }
+    public static void ts(boolean entrada){
+        ts = entrada;
+    }
 
     public static void w(String entrada) { // escreve o log
         if (lse)
             System.out.println(entrada);
+    }
+    public static void wTS(String entrada) { // escreve o log
+        System.out.println(entrada);
     }
 
     private static boolean usando_declarando = false;// false -> declarado ; true -> usando
@@ -85,6 +91,8 @@ public class Sematico {
                     
             }
         }
+        if(ts)
+            imprimirTS();
     }
     private static PalavraValor encontrar(String alvo){
         for(PalavraValor procura : declaradas ){
@@ -96,6 +104,14 @@ public class Sematico {
         return null;
     }
     
+    private static void imprimirTS(){
+        wTS("--- Tabela Simbolo ---");
+        for(PalavraValor simbolo : declaradas){
+            wTS(" "+simbolo.lexema);
+        }
+        wTS("--- ############## ---");
+    }
+
     private static void usando(String entrada){
         switch (entrada){
             case "=":
