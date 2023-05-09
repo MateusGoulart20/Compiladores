@@ -2,7 +2,7 @@ write "entre com alguma coisa";
 read algumacoisa;
 xt = 4;
 v = 0;
-if algumacoisa < 458+xt*((v)) {
+if algumacoisa < xt*458+xt*((v)) {
  write "banana";
 }else{
  write "couve flor";

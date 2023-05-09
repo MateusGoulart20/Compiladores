@@ -8,4 +8,10 @@ public class Token {
         this.coluna = c;
         this.lexema = lex;
     }
+    public Token(String t, String lex){
+        this.token = t;
+        this.linha = 0;
+        this.coluna = 0;
+        this.lexema = lex;
+    }
 }

@@ -5,6 +5,10 @@ public class Sematico {
     public static boolean erro;
     private static ArrayList<PalavraValor> declaradas = new ArrayList<PalavraValor>();;
 
+    public static ArrayList<PalavraValor> getDeclaradas() {
+        return declaradas;
+    }
+
     public static void lse(boolean entrada) { // impoe a opcao selecionada
         lse = entrada;
     }

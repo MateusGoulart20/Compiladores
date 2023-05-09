@@ -1,0 +1,64 @@
+var_algumacoisa: ds 1
+var_xt: ds 1
+var_v: ds 1
+var_fatorial: ds 1
+var_f: ds 1
+var_i: ds 1
+aux_1: ds 1
+aux_2: ds 1
+aux_3: ds 1
+aux_4: ds 1
+aux_5: ds 1
+aux_6: ds 1
+aux_7: ds 1
+aux_8: ds 1
+aux_9: ds 1
+aux_10: ds 1
+aux_11: ds 1
+aux_12: ds 1
+aux_13: ds 1
+aux_14: ds 1
+aux_15: ds 1
+aux_16: ds 1
+aux_17: ds 1
+aux_18: ds 1
+aux_19: ds 1
+aux_20: ds 1
+if_1_e: ds 1
+if_1_d: ds 1
+while_1_e: ds 1
+while_1_d: ds 1
+var_xt RECEBE 4
+var_v RECEBE 0
+if_1_e RECEBE algumacoisa
+aux_1 MULT xt 458
+aux_2 MULT xt v
+aux_3 SOMA aux_1 aux_2
+if_1_d RECEBE aux_3
+COMPARE if_1_e if_1_d
+var_f RECEBE 1
+var_i RECEBE 1
+while_1_e RECEBE i
+aux_1 MULT f i
+while_1_d RECEBE aux_1
+COMPARE while_1_e while_1_d
+aux_1 SOMA i 1
+var_i RECEBE aux_1
+write " entre com alguma coisa " ;
+read algumacoisa ;
+xt = 4 ;
+v = 0 ;
+if algumacoisa < xt * 458 + xt * ( ( v ) ) {
+write " banana " ;
+} else {
+write " couve flor " ;
+} ;
+write " numero para fatorial " ;
+read fatorial ;
+f = 1 ;
+i = 1 ;
+while i < fatorial {
+f = f * i ;
+i = i + 1 ;
+} ;
+write f ;

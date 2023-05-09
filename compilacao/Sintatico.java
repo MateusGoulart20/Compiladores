@@ -11,6 +11,7 @@ int : search(Object o) :Returns the 1-based position where an object is on this 
 public class Sintatico {
     static Stack<String> pilha = new Stack<String>();
     static private boolean ls, erro = false;
+    static private ArrayList<Token> tokenList;
 
     public static void ls(boolean entrada) {
         ls = entrada;
@@ -42,7 +43,7 @@ public class Sintatico {
     }
 
     public static void analise(ArrayList<Token> entrada) {
-        ArrayList<Token> tokenList = new ArrayList<Token>();
+        tokenList = new ArrayList<Token>();
         for (Token pas : entrada) {
             tokenList.add(pas);
         }

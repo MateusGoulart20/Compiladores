@@ -9,6 +9,11 @@ public class Compilador {
     static private boolean ls = false;
     static private boolean lse = false;
     static private boolean ts = false;
+    static private ArrayList<Token> tokenList;
+
+    public static ArrayList<Token> getTokenList() {
+        return tokenList;
+    }
 
     public static void main(String[] args) {
         System.out.println("Comando reconhecidos = " + args.length);
@@ -23,7 +28,7 @@ public class Compilador {
     }
 
     private static void compilar(String argumento) {
-        ArrayList<Token> tokenList = new ArrayList<Token>();
+        tokenList = new ArrayList<Token>();
 
         File arquivoFonte = new File(argumento); // Pega a primeira localização de item.
         if (arquivoFonte.exists()) { // existe portanto executa o código
@@ -46,6 +51,8 @@ public class Compilador {
                 Sematico.analise(tokenList);
                 if (Sematico.erro)
                     System.out.println("Sematico erro");
+                Intermediario.write_lexema(tokenList);
+
             } catch (FileNotFoundException e) {
                 System.out.println("File Not Found Exception");
                 e.printStackTrace();
