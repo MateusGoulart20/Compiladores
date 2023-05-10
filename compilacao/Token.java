@@ -2,6 +2,11 @@ public class Token {
     public int linha, coluna;
     public String token, lexema;
 
+    @Override
+    public String toString() {
+        return "["+token+","+lexema+"]";
+    }
+
     public Token(String t, int l, int c, String lex){
         this.token = t;
         this.linha = l;

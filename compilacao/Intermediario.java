@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 // IO
 import java.io.IOException;
 //import java.io.OutputStream;
@@ -14,12 +15,14 @@ public class Intermediario {
     private static ArrayList<PalavraValor> declaradas = Sematico.getDeclaradas();
     private static ArrayList<Token> tokenList;
     private static ArrayList<String> variaveis = new ArrayList<String>(), comando = new ArrayList<String>();
+    private static Stack<String> escopo = new Stack<String>();
+    private static int max_operation = 0;
 
     public static void write_lexema(ArrayList<Token> tl) {
         tokenList = tl;
         // Gerar as variaveis antes de começar o esquema
-        gerar_variaveis();
         gerar_comandos();
+        gerar_variaveis();
         try{
             //Fluxo de saida de um arquivo
             //OutputStream os =  // nome do arquivo que será escrito
@@ -35,10 +38,8 @@ public class Intermediario {
             // Coisas que podem levar um pointer matematico
             // "=" atribute. -> atribute pointer ponto_virgula
             // if pointer condicao pointer open C
+            
             for (Token i : tokenList){
-                         
-               
-              
                 br.write(i.lexema);
                 if(i.lexema.equals(";")||i.lexema.equals("{")){
                     br.write("\n");
@@ -53,11 +54,11 @@ public class Intermediario {
         
     }
     private static void gerar_comandos(){
-        int cont_if = 1, cont_while = 1, aux, aux1, aux2, aux3;
+        int cont_if = 1, cont_while = 1;
         ArrayList<Token> analise = new ArrayList<Token>();
         for(Token t : tokenList){
             analise.add(t);
-            if(t.token.equals("pontoVirgula")||t.token.equals("closeC")){
+            if(t.lexema.equals(";")||t.lexema.equals("{")){
                 if(analise.get(0).token.equals("id")){
                     if(analise.get(1).token.equals("atribute")){
                         // portanto é o começo de um atribuicao
@@ -66,25 +67,42 @@ public class Intermediario {
                     }
                 }
                 if(analise.get(0).token.equals("if")){
+                    //comando.add("if_in "+cont_if);
                     for(int i = 0; i<analise.size(); i++){
                         if(analise.get(i).token.equals("condicao")){
                             resolver_expressao("if_"+cont_if+"_e", analise.subList(1, i));
                             resolver_expressao("if_"+cont_if+"_d", analise.subList(i+1, analise.size()-1));
-                            comando.add("COMPARE if_"+cont_if+"_e if_"+cont_if+"_d");
                         }
                     }
+                    comando.add("COMPARE if_"+cont_if+"_e if_"+cont_if+"_d");
+                    comando.add("JMP if_out_false_"+cont_if);
+                    escopo.push("ROT if_out_false_"+cont_if);
                     cont_if++;
                 }
                 if(analise.get(0).token.equals("while")){
                     for(int i = 0; i<analise.size(); i++){
                         if(analise.get(i).token.equals("condicao")){
-                            comando.add("");
+                            comando.add("whilhe_in_"+cont_while);
+                            escopo.push("while_out_"+cont_while);
                             resolver_expressao("while_"+cont_while+"_e", analise.subList(1, i));
                             resolver_expressao("while_"+cont_while+"_d", analise.subList(i+1, analise.size()-1));
                             comando.add("COMPARE while_"+cont_while+"_e while_"+cont_while+"_d");
                         }
                     }
                     cont_while++;
+                }
+                if(analise.get(0).lexema.equals("}")){
+                    //System.out.println("while:"+cont_while+" if:"+cont_if);
+                    if(analise.get(1).lexema.equals("else")){
+                        comando.add("JMP if_out_"+(cont_if-1));
+                        comando.add(escopo.pop());
+                        escopo.push("ROT if_out_"+(cont_if-1));
+                    }else{
+                        comando.add(escopo.pop());
+                    }
+                }
+                if(analise.get(0).lexema.equals("write")){
+                    comando.add("escreva "+analise.toString());
                 }
                 analise = new ArrayList<Token>();
             }
@@ -104,6 +122,7 @@ public class Intermediario {
         }else{
             comando.add("RECEBE "+t+" aux_"+operation);
         }
+        if(operation>max_operation)max_operation=operation;
         /*String debug = "//test:";
         for(int i =0; i<expressao.size();i++ )debug += expressao.get(i).lexema + " ";
         debug += "\n";
@@ -134,7 +153,7 @@ public class Intermediario {
             expressao.set(i, expressao.get(i+1));
         }
         
-        return expressao.subList(0, expressao.size()-3);
+        return expressao.subList(0, expressao.size()-2);
     }
 
     private static int maior_prioridade(List<Token> expressao){
@@ -171,6 +190,8 @@ public class Intermediario {
         for (int i=0; i<expressao.size() ; i++){
             t = expressao.get(i);
             if(t.token.equals("closeP")){
+                //for(int erro = 0; erro<expressao.size(); erro++)System.out.print("["+expressao.get(erro).lexema+"]");
+                //System.out.print("\n");
                 if(expressao.get(i-2).token.equals("openP")){
                     // precisa tirar os parenteses inuteis
                     for(int v = i-2; v<expressao.size()-1; v++){
@@ -179,7 +200,7 @@ public class Intermediario {
                     for(int v = i-1; v<expressao.size()-1; v++){
                         expressao.set(v, expressao.get(v+1));
                     }
-                    return desparentizar(expressao);
+                    return desparentizar(expressao.subList(0, expressao.size()-2));
                 }
             }
         }
@@ -194,7 +215,7 @@ public class Intermediario {
         for(PalavraValor p : declaradas){
             variaveis.add("var_"+p.lexema);
         }
-        for(int i=1; i<= 20; i++){
+        for(int i=1; i<= max_operation; i++){
             variaveis.add("aux_"+i);
         }
         for(Token t : tokenList){
