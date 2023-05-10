@@ -4,7 +4,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return "["+token+","+lexema+"]";
+        return lexema;
     }
 
     public Token(String t, int l, int c, String lex){

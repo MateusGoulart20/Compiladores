@@ -30,7 +30,7 @@ public class Intermediario {
             BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("file1.txt"))); // adiciono a um escritor de buffer
 
             for (String t : variaveis){
-                br.write(t+": ds 1\n");
+                br.write("VAR "+t+"\n");
             }
             for (String t : comando){
                 br.write(t+"\n");
@@ -38,7 +38,7 @@ public class Intermediario {
             // Coisas que podem levar um pointer matematico
             // "=" atribute. -> atribute pointer ponto_virgula
             // if pointer condicao pointer open C
-            
+            br.write("\n");
             for (Token i : tokenList){
                 br.write(i.lexema);
                 if(i.lexema.equals(";")||i.lexema.equals("{")){
@@ -68,25 +68,26 @@ public class Intermediario {
                 }
                 if(analise.get(0).token.equals("if")){
                     //comando.add("if_in "+cont_if);
+                    int v=0;
                     for(int i = 0; i<analise.size(); i++){
                         if(analise.get(i).token.equals("condicao")){
+                            v=i;
                             resolver_expressao("if_"+cont_if+"_e", analise.subList(1, i));
                             resolver_expressao("if_"+cont_if+"_d", analise.subList(i+1, analise.size()-1));
                         }
                     }
-                    comando.add("COMPARE if_"+cont_if+"_e if_"+cont_if+"_d");
-                    comando.add("JMP if_out_false_"+cont_if);
+                    comando.add("COMPARE "+analise.get(v).lexema+" if_"+cont_if+"_e if_"+cont_if+"_d\nJMP if_out_false_"+cont_if);
                     escopo.push("ROT if_out_false_"+cont_if);
                     cont_if++;
                 }
                 if(analise.get(0).token.equals("while")){
                     for(int i = 0; i<analise.size(); i++){
                         if(analise.get(i).token.equals("condicao")){
-                            comando.add("whilhe_in_"+cont_while);
-                            escopo.push("while_out_"+cont_while);
+                            comando.add("ROT while_in_"+cont_while);
+                            escopo.push("JMP while_in_"+cont_while+"\nROT while_out_"+cont_while);
                             resolver_expressao("while_"+cont_while+"_e", analise.subList(1, i));
                             resolver_expressao("while_"+cont_while+"_d", analise.subList(i+1, analise.size()-1));
-                            comando.add("COMPARE while_"+cont_while+"_e while_"+cont_while+"_d");
+                            comando.add("COMPARE "+analise.get(i).lexema+" while_"+cont_while+"_e while_"+cont_while+"_d\nJMP while_out_"+cont_while);
                         }
                     }
                     cont_while++;
@@ -102,12 +103,24 @@ public class Intermediario {
                     }
                 }
                 if(analise.get(0).lexema.equals("write")){
-                    comando.add("escreva "+analise.toString());
+                    boolean aspas = false;
+                    for(int i = 1; i<analise.size(); i++){
+                        if(analise.get(i).token.equals("id")){
+                            if(aspas){
+                                comando.add("WRITS "+analise.get(i).lexema);
+                            }else{
+                                comando.add("WRITV var_"+analise.get(i).lexema);
+                            }
+                        }
+                        if(analise.get(i).token.equals("aspas"))aspas = !aspas;
+                    }
+                    
                 }
                 analise = new ArrayList<Token>();
             }
         }
     }
+
     private static void resolver_expressao(String t, List<Token> expressao){
         int index = 0, operation=0;
         while(true){
@@ -132,16 +145,16 @@ public class Intermediario {
     private static List<Token> suprimir(List<Token> expressao, int posi, int aux){
         Token auxiliar = new Token("aux", "aux_"+aux); auxiliar.coluna=0;
         if(expressao.get(posi).lexema.equals("+")){
-            comando.add(auxiliar.lexema+" SOMA "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
+            comando.add("SOMA "+auxiliar.lexema+" "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
         }
         if(expressao.get(posi).lexema.equals("-")){
-            comando.add(auxiliar.lexema+" SUBT "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
+            comando.add("SUBT "+auxiliar.lexema+" "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
         }
         if(expressao.get(posi).lexema.equals("*")){
-            comando.add(auxiliar.lexema+" MULT "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
+            comando.add("MULT "+auxiliar.lexema+" "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
         }
         if(expressao.get(posi).lexema.equals("/")){
-            comando.add(auxiliar.lexema+" DIVD "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
+            comando.add("DIVD "+auxiliar.lexema+" "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
         }
 
         // depois de qualquer operacao
