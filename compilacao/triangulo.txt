@@ -1,0 +1,27 @@
+e1 = 6;
+e2 = 6;
+e3 = 6;
+r = 0;
+if(e1+e2<e3) {r=r+1;};
+if(e1+e2==e3){r=r+1;};
+if(e1+e3<e2){r=r+1;};
+if(e1+e3==e2){r=r+1;};
+if(e3+e2<e1){r=r+1;};
+if(e3+e2==e1){r=r+1;};
+if(r == 1){
+ write "n eh triangulo";
+}else{
+ write "eh triangulo";
+ if(e2==e3){r=r+1;};
+ if(e1==e3){r=r+1;};
+ if(e2==e1){r=r+1;};
+ if(r<1){
+  write "escaleno";
+ };
+ if(r==1){
+  write "isolceles";
+ };
+ if(1<r){
+  write "equilatero";
+ };
+};

@@ -1,12 +1,16 @@
+import java.util.ArrayList;
+import java.util.List;
 public class testing {
+    private static ArrayList<Integer> lista = new ArrayList<Integer>();
     public static void main(String[] args) {
-        int x = 3;
-        switch (x){
-            case 1:System.out.println("1 - "+x);
-            case 2:System.out.println("2 - "+x);
-            case 3:System.out.println("3 - "+x);
-            case 4:System.out.println("4 - "+x); //return;
-            case 5:System.out.println("5 - "+x);
-        }
+        lista.add(2);
+        lista.add(5);
+        lista.add(12);
+        lista.add(25);
+        System.out.println(lista);
+        List<Integer> lista2 = lista.subList(0, lista.size()); 
+        System.out.println(lista2);
+        lista2.remove(2);
+        System.out.println(lista2);
     }
 }

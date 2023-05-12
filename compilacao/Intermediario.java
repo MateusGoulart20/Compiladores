@@ -18,7 +18,7 @@ public class Intermediario {
     private static Stack<String> escopo = new Stack<String>();
     private static int max_operation = 0;
 
-    public static void write_lexema(ArrayList<Token> tl) {
+    public static void write_lexema(ArrayList<Token> tl, String argument) {
         tokenList = tl;
         // Gerar as variaveis antes de começar o esquema
         gerar_comandos();
@@ -27,7 +27,7 @@ public class Intermediario {
             //Fluxo de saida de um arquivo
             //OutputStream os =  // nome do arquivo que será escrito
             //Writer wr = new OutputStreamWriter(new FileOutputStream("file1.txt")); // criação de um escritor
-            BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("file1.txt"))); // adiciono a um escritor de buffer
+            BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(argument+"_inter.txt"))); // adiciono a um escritor de buffer
 
             for (String t : variaveis){
                 br.write("VAR "+t+"\n");
@@ -38,7 +38,7 @@ public class Intermediario {
             // Coisas que podem levar um pointer matematico
             // "=" atribute. -> atribute pointer ponto_virgula
             // if pointer condicao pointer open C
-            br.write("\n");
+            /*br.write("\n");
             for (Token i : tokenList){
                 br.write(i.lexema);
                 if(i.lexema.equals(";")||i.lexema.equals("{")){
@@ -46,7 +46,7 @@ public class Intermediario {
                 }else{
                     br.write(" ");
                 }
-            }
+            }*/
             br.close();
         } catch (IOException ioe){
             System.out.println("FAIL");
@@ -207,13 +207,9 @@ public class Intermediario {
                 //System.out.print("\n");
                 if(expressao.get(i-2).token.equals("openP")){
                     // precisa tirar os parenteses inuteis
-                    for(int v = i-2; v<expressao.size()-1; v++){
-                        expressao.set(v, expressao.get(v+1));
-                    }
-                    for(int v = i-1; v<expressao.size()-1; v++){
-                        expressao.set(v, expressao.get(v+1));
-                    }
-                    return desparentizar(expressao.subList(0, expressao.size()-2));
+                    expressao.remove(i-2);
+                    expressao.remove(i-1);
+                    return desparentizar(expressao.subList(0, expressao.size()));
                 }
             }
         }

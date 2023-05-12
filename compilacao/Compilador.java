@@ -51,7 +51,7 @@ public class Compilador {
                 Sematico.analise(tokenList);
                 if (Sematico.erro)
                     System.out.println("Sematico erro");
-                Intermediario.write_lexema(tokenList);
+                Intermediario.write_lexema(tokenList,argumento);
 
             } catch (FileNotFoundException e) {
                 System.out.println("File Not Found Exception");
