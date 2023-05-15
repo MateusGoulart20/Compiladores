@@ -89,6 +89,8 @@ public class Sematico {
                                 
                             }
                 }
+                if(token.token.equals("atribute"))
+                    indeterminar(last.lexema);    
                 
                 if(token.lexema.equals("/")) division = true;
                    
@@ -97,6 +99,12 @@ public class Sematico {
         }
         if(ts)
             imprimirTS();
+    }
+    private static void indeterminar(String alvo){
+        for(PalavraValor procura : declaradas ){
+            if(procura.lexema.equals(alvo))
+                procura.indeterminado = true;
+        }
     }
     private static PalavraValor encontrar(String alvo){
         for(PalavraValor procura : declaradas ){

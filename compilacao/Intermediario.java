@@ -212,6 +212,9 @@ public class Intermediario {
                     return desparentizar(expressao.subList(0, expressao.size()));
                 }
             }
+            if(expressao.size() == 2){
+                System.out.print(expressao);
+            }
         }
         return expressao;
     }
