@@ -21,7 +21,6 @@ public class NasmMaker {
     }
 
     public static void writeAssembly() throws IOException{
-        System.out.println("### NASM MAKER ###");
         inner_archive = Intermediario.archive_name;
         Scanner myReader = new Scanner(new File(inner_archive));
         asm_archive = inner_archive.substring(0, inner_archive.length()-10);
@@ -74,124 +73,133 @@ public class NasmMaker {
             case "RCB":
                 //manipulacion = linha.substring(manis);
                 manis = manipulacion.indexOf(' ');
-                resp += "mov eax, ";
-                resp += manipulacion.substring(manis+1, manipulacion.length());
-                resp += "\n\tmov [";
-                resp += manipulacion.substring(0, manis);
-                resp += "], eax; ATRIBUICAO";
+                oper1 = manipulacion.substring(0, manis);
+                oper2 = manipulacion.substring(++manis);
+
+                oper2 = oper(oper2);
+
+                resp += "mov eax, "+oper2+"; de\n\t";
+                resp += "mov ["+oper1+"], eax; para  ATRIBUICAO\n";
                 main.add(resp);
                 break;
             case "ROT":
                 //manipulacion = linha.substring(manis);
                 resp += manipulacion;
-                resp += ":; ROTULO";
+                resp += ":; ROTULO\n";
                 main.add(resp);
                 break;
             case "CMP":
                 //manipulacion = linha.substring(manis)
                 String cmp, left, right, jmp;
                 // pegar a comparacao
-                System.out.println("##"+manipulacion);
+                w("##"+manipulacion);
 
                 manis = manipulacion.indexOf(' ');
                 cmp = manipulacion.substring(0, manis);
-                System.out.println("\t#"+cmp);
+                w("\t#"+cmp);
 
                 manipulacion = manipulacion.substring(++manis);
 
                 manis = manipulacion.indexOf(' ');
                 left = manipulacion.substring(0, manis);
-                System.out.println("\t#"+left);
+                w("\t#"+left);
 
                 manipulacion = manipulacion.substring(++manis);
                 
                 manis = manipulacion.indexOf(' ');
                 right = manipulacion.substring(0, manis);
-                System.out.println("\t#"+right);
+                w("\t#"+right);
 
                 jmp = manipulacion.substring(++manis);
-                System.out.println("\t#"+jmp);
+                w("\t#"+jmp);
 
-                if(cmp.equals("<")) cmp = "jnge";
+                if(cmp.equals("<")) cmp = "jae";
                 if(cmp.equals("==")) cmp = "jne";
 
                 resp += "mov ebx, ["+left+"]\n\tmov ecx, ["+right+"]; posicionamento condicao\n\t";
-                resp += "cmp ebx, ecx ;comparacao\n\t"+cmp+" "+jmp+";salto se condicao atendida"; 
+                resp += "cmp ebx, ecx ;comparacao\n\t"+cmp+" "+jmp+";salto se condicao atendida\n";
                 main.add(resp);
                 break;
 
             case "SOMA":
                 //String oper1, oper2, local;
                 manis = manipulacion.indexOf(' ');
-                oper1 = manipulacion.substring(0, manis);
+                local = manipulacion.substring(0, manis);
 
                 manipulacion = manipulacion.substring(++manis);
 
                 manis = manipulacion.indexOf(' ');
-                oper2 = manipulacion.substring(0, manis);
-
-                local = manipulacion.substring(++manis);
-
-                resp += "mov ebx, ["+oper1+"]\n\t";
-                resp += "mov ecx, ["+oper2+"]\n\t";
+                oper1 = manipulacion.substring(0, manis);
+                oper1 = oper(oper1);
+                oper2 = manipulacion.substring(++manis);
+                oper2 = oper(oper2);
+                
+                resp += "mov ebx, "+oper1+"\n\t";
+                resp += "mov ecx, "+oper2+"\n\t";
                 resp += "add ebx, ecx\n\t";
-                resp += "mov ["+local+"], ecx";
+                resp += "mov ["+local+"], ebx; SOMA\n";
                 
                 main.add(resp);
-
+                
                 break;
             case "SUBT":
                 manis = manipulacion.indexOf(' ');
-                oper1 = manipulacion.substring(0, manis);
-
+                local = manipulacion.substring(0, manis);
+                
                 manipulacion = manipulacion.substring(++manis);
-
+                
                 manis = manipulacion.indexOf(' ');
-                oper2 = manipulacion.substring(0, manis);
+                oper1 = manipulacion.substring(0, manis);
+                oper1 = oper(oper1);
+                
+                oper2 = manipulacion.substring(++manis);
+                oper2 = oper(oper2);
 
-                local = manipulacion.substring(++manis);
-
-                resp += "mov ebx, ["+oper1+"]\n\t";
-                resp += "mov ecx, ["+oper2+"]\n\t";
+                resp += "mov ebx, "+oper1+"\n\t";
+                resp += "mov ecx, "+oper2+"\n\t";
                 resp += "sub ebx, ecx\n\t";
-                resp += "mov ["+local+"], ecx";
+                resp += "mov ["+local+"], ebx; SUBT \n";
                 
                 main.add(resp);
                 break;
             case "MULT":
                 manis = manipulacion.indexOf(' ');
-                oper1 = manipulacion.substring(0, manis);
+                local = manipulacion.substring(0, manis);
 
                 manipulacion = manipulacion.substring(++manis);
 
                 manis = manipulacion.indexOf(' ');
-                oper2 = manipulacion.substring(0, manis);
+                oper1 = manipulacion.substring(0, manis);
+                oper1 = oper(oper1);
 
-                local = manipulacion.substring(++manis);
+                oper2 = manipulacion.substring(++manis);
+                oper2 = oper(oper2);
 
-                resp += "mov al, ["+oper1+"]\n\t";
-                resp += "mov bl, ["+oper2+"]\n\t";
-                resp += "mul bl\n\t";
-                resp += "mov ["+local+"], ax";
+                resp += "mov ax, "+oper1+"\n\t";
+                resp += "mov bx, "+oper2+"\n\t";
+                resp += "mul bx\n\t";
+                resp += "mov ["+local+"], eax; MULT\n";
                 
                 main.add(resp);
                 break;
             case "DIVD":
                 manis = manipulacion.indexOf(' ');
-                oper1 = manipulacion.substring(0, manis);
+                local = manipulacion.substring(0, manis);
 
                 manipulacion = manipulacion.substring(++manis);
 
                 manis = manipulacion.indexOf(' ');
-                oper2 = manipulacion.substring(0, manis);
+                oper1 = manipulacion.substring(0, manis);
+                oper1 = oper(oper1);
 
-                local = manipulacion.substring(++manis);
+                oper2 = manipulacion.substring(++manis);
+                oper2 = oper(oper2);
 
-                resp += "mov ax, ["+oper1+"]\n\t";
-                resp += "mov dx, 0\n\t";
-                resp += "mov cx, ["+oper2+"]\n\t";
-                resp += "div cx\n\t";
-                resp += "mov ["+local+"], ax";
+                resp += "mov eax, "+oper1+"\n\t";
+                resp += "mov edx, 0\n\t";
+                resp += "mov ecx, "+oper2+"\n\t";
+                resp += "div ecx\n\t";
+                resp += "mov ["+local+"], eax; DIVD \n";
                 
                 main.add(resp);
                 break;
@@ -201,7 +209,7 @@ public class NasmMaker {
                 //if(manis > 0) manipulacion = manipulacion.substring(0, manis);
 
                 resp += "push "+manipulacion;
-                resp += "\n\tcall _printf; WRITS escreve string";
+                resp += "\n\tcall _printf; WRITS escreve string\n";
                 main.add(resp);
                 break;
             case "WRITV":
@@ -210,7 +218,7 @@ public class NasmMaker {
                 resp += "mov eax, ["+manipulacion+"]\n\t";
                 resp += "push eax\n\t";
                 resp += "push formato\n\t";
-                resp += "call _printf; WRITV escreve variavel";
+                resp += "call _printf; WRITV escreve variavel\n";
                 main.add(resp);
                 break;
             case "READ":
@@ -219,14 +227,21 @@ public class NasmMaker {
 
                 resp += "push "+manipulacion;
                 resp += "\n\tpush formato";
-                resp += "\n\tcall _scanf";
+                resp += "\n\tcall _scanf\n";
+                main.add(resp);
+                break;
+            case "JMP":
+                resp += "jmp "+manipulacion+" ; JMP\n";
                 main.add(resp);
                 break;
             default:
-                w("$NasmMaker ERROR");
+                System.out.println("\t$$$$$$$$$$$NasmMaker ERROR");
         }
 
-
+    }
+    private static String oper(String a){
+        if(!(a.matches("[0-9]*"))) a = "["+a+"]";
+        return a;
     }
 
     private static void ini (){

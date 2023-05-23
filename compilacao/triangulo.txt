@@ -1,14 +1,14 @@
-e1 = 6;
-e2 = 6;
-e3 = 6;
-r = 0;
-if(e1+e2<e3) {r=r+1;};
-if(e1+e2==e3){r=r+1;};
-if(e1+e3<e2){r=r+1;};
-if(e1+e3==e2){r=r+1;};
-if(e3+e2<e1){r=r+1;};
-if(e3+e2==e1){r=r+1;};
-if(r == 1){
+write "primeiro lado";
+read e1;
+write "segundo lado";
+read e2;
+write "terceiro lado";
+read e3;
+r = 3;
+if(e1<e3+e2){r=r-1;};
+if(e3<e1+e2){r=r-1;};
+if(e2<e3+e1){r=r-1;};
+if(0 < r){
  write "n eh triangulo";
 }else{
  write "eh triangulo";

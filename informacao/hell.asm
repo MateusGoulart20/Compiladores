@@ -1,15 +1,38 @@
  section	.data
-   msg1 db 'insira um num', 10,0  ;string to be printed
-   sorvete db 10, 0
-   pizza db "%d", 0
-   lasanha db "%d", 0xA, 0x0
-   zero db '0'
+   pula db 10, 0
+	formato db "%d", 0
+	text1 db "n eh triangulo ", 10, 0
+	text2 db "eh triangulo ", 10, 0
+	text3 db "escaleno ", 10, 0
+	text4 db "isolceles ", 10, 0
+	text5 db "equilatero ", 10, 0
 
  section .bss
-   banana resd 2
-   multa resd 1
-   multb resd 1
-   multc resd 1
+   e1	resd 2
+	e2	resd 2
+	e3	resd 2
+	r	resd 2
+	aux1	resd 2
+	if1e	resd 2
+	if1d	resd 2
+	if2e	resd 2
+	if2d	resd 2
+	if3e	resd 2
+	if3d	resd 2
+	if4e	resd 2
+	if4d	resd 2
+	if5e	resd 2
+	if5d	resd 2
+	if6e	resd 2
+	if6d	resd 2
+	if7e	resd 2
+	if7d	resd 2
+	if8e	resd 2
+	if8d	resd 2
+	if9e	resd 2
+	if9d	resd 2
+	if10e	resd 2
+	if10d	resd 2
 
  section	.text
    global _main     ;must be declared for linker (ld)
@@ -17,6 +40,18 @@
    extern _scanf
 
 _main:	            ;tells linker entry point
+	mov eax, 28796
+	mov edx, 0
+	mov ecx, 800
+	div ecx
+	mov ebx, eax
+	mov [aux1], ebx
+	mov eax, [aux1]
+	push eax
+	push formato
+	call _printf
+   
+   ;add esp, 4
    ;push ebp
  	;mov ebp,esp
 	;push msg
@@ -100,19 +135,22 @@ _main:	            ;tells linker entry point
    ;push eax
    ;push pizza
    ;call _printf
-   mov ebx, 9
-   mov ecx, 8
-   cmp ebx, ecx
-   jl rodolfo
+   ;TESTE DE IDENTACAO DO ROTULO
+   ;mov ebx, 9
+   ;mov ecx, 8
+   ;cmp ebx, ecx
+   ;jl rodolfo
 
-   push msg1
-   call _printf
+   ;push msg1
+   ;call _printf
 
-   rodolfo:
+   ;rodolfo:
 
-   push msg1
-   call _printf
+   ;push msg1
+   ;call _printf
    
+   
+
    ;push sorvete 
    ;call _printf
   

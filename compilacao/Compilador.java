@@ -66,7 +66,7 @@ public class Compilador {
                 System.out.println("File Not Found Exception");
                 e.printStackTrace();
             } finally {
-                System.out.println("Executado");
+                System.out.println("##FIM COMPILADOR");
             }
         }
     }

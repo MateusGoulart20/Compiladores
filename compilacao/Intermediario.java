@@ -73,7 +73,7 @@ public class Intermediario {
                 default:
                     analise.add(t);
                     if(t.lexema.equals(";")||t.lexema.equals("{")){
-                        System.out.println("\t@Gerar comando "+analise);
+                        w("\t@Gerar comando "+analise);
                         command(analise);
                         analise = new ArrayList<Token>();
                     }
@@ -139,7 +139,7 @@ public class Intermediario {
                 return;
             // resolver fechada de corpo de comando
             case "closeC" :
-                System.out.println("Fim do corpo de comando: while = "+cont_while+" if = "+cont_if+" | "+escopo.peek());
+                w("Fim do corpo de comando: while = "+cont_while+" if = "+cont_if+" | "+escopo.peek());
                 if(expressao.get(1).lexema.equals("else")){
                     comando.add("JMP if_out_"+(cont_if-1));
                     comando.add(escopo.pop());
@@ -172,9 +172,9 @@ public class Intermediario {
     }
     private static void resolver_expressao(String t, List<Token> expressao){
         int index = 0, operation=0;
-        System.out.print("Resolver expressao: ");
+        w("Resolver expressao: ");
         while(true){
-            System.out.print(expressao+" - ");
+            w(expressao+" - ");
             expressao = desparentizar(expressao);
             index = maior_prioridade(expressao);
             if(index == 0)break;
@@ -187,7 +187,6 @@ public class Intermediario {
             comando.add("RCB "+t+" aux"+operation);
         }
         if(operation>max_operation)max_operation=operation;
-        System.out.println();
         /*String debug = "//test:";
         for(int i =0; i<expressao.size();i++ )debug += expressao.get(i).lexema + " ";
         debug += "\n";
