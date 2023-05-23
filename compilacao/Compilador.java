@@ -1,14 +1,12 @@
 
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
+import java.io.IOException;
 import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.ArrayList;
 
 public class Compilador {
-    static private boolean lt = false;
-    static private boolean ls = false;
-    static private boolean lse = false;
-    static private boolean ts = false;
+    static private boolean lt = false, ls = false, lse = false, ts = false, nasm = false, inter = false;
     static private ArrayList<Token> tokenList;
 
     public static ArrayList<Token> getTokenList() {
@@ -49,9 +47,20 @@ public class Compilador {
                 myReader.close();
 
                 Sematico.analise(tokenList);
-                if (Sematico.erro)
-                    System.out.println("Sematico erro");
-                Intermediario.write_lexema(tokenList,argumento);
+                if (Sematico.erro) System.out.println("Sematico erro");
+
+                System.out.println("### INICIANDO INTERMERDIARIO ###");
+                try{
+                    Intermediario.write(tokenList,argumento);
+                }catch (IOException e){
+                    System.out.println("#$# Falha a utilizar arquivo");
+                }
+                System.out.println("### INICIANDO NASM ASSEMBLY ###");
+                try{
+                    NasmMaker.writeAssembly();
+                }catch (IOException e){
+                    System.out.println("#$# Falha a utilizar arquivo");
+                }
 
             } catch (FileNotFoundException e) {
                 System.out.println("File Not Found Exception");
@@ -73,11 +82,17 @@ public class Compilador {
                 lse = true;
             if(argumento.equals("-ts"))
                 ts = true;
+            if(argumento.equals("-nasm"))
+                nasm = true;
+            if(argumento.equals("-inter"))
+                inter = true;
             if (argumento.equals("-tudo")) {
                 lt = true;
                 ls = true;
                 lse = true;
                 ts = true;
+                inter = true;
+                nasm = true;
             }
 
             if (arquivoExistente(argumento)) {
@@ -88,6 +103,8 @@ public class Compilador {
         Sintatico.ls(ls);
         Sematico.lse(lse);
         Sematico.ts(ts);
+        Intermediario.inter(inter);
+        NasmMaker.nasm(nasm);
         return i;
     }
 

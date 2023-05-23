@@ -1,35 +1,37 @@
 base=10;
 
 i=0;
+
 while(i<base){
- v=0;
- while(v<i+1){
-   fi = 1;
-   aux = i+1;
-   cont = 1;
-   while (cont < aux) {
-	fi = fi*cont;
-	cont = cont+1;
+   v=0;
+   while(v<i+1){
+      fi = 1;
+      aux = i+1;
+      cont = 1;
+      while (cont < aux) {
+         fi = fi*cont;
+         cont = cont+1;
+      };
+      fv = 1;
+      aux = v+1;
+      cont = 1;
+      while (cont < aux) {
+         fv = fv*cont;
+         cont = cont+1;
+      };
+
+      fiv = 1;
+      aux = i-v+1;
+      cont = 1;
+      while (cont < aux) {
+         fv = fv*cont;
+         cont = cont+1;
+      };
+      result = fi/ (fv*fiv);
+      write result;
+      v=v+1;
    };
-   fv = 1;
-   aux = v+1;
-   cont = 1;
-   while (cont < aux) {
-	fv = fv*cont;
-	cont = cont+1;
-   };
-   fiv = 1;
-   aux = i-v+1;
-   cont = 1;
-   while (cont < aux) {
-	fv = fv*cont;
-	cont = cont+1;
-   };  
-   result = fi/ (fv*fiv);
-   write result;
-   v=v+1;
-   };
- write " ";
- i=i+1;
+   write " ";
+   i=i+1;
 };
 

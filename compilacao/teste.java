@@ -1,6 +1,7 @@
 public class teste {
 
-    public static void main(String[] args) {/* 
+    public static void main(String[] args) {
+        /* 
         int base = 10, result, i  =0, v =0;
         while(i<base){
             v=0;
@@ -10,7 +11,7 @@ public class teste {
             v++;}
             System.out.println();
         i++;}
-        System.out.println("------");*/
+        System.out.println("------");
 
         int e1 = 6, e2 = 6  , e3 = 6, r = 0;
         if(e1+e2<e3)r++;
@@ -46,10 +47,12 @@ public class teste {
             r = r*cont;
             cont++;
         }
-        return r;
+        return r;]
+        */
     }
     
 
 
+    
 
 }

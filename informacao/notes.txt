@@ -1,0 +1,3 @@
+nasm -fwin32 .\Target.asm
+gcc -m32 .\Target.obj -o .\Target.exe
+.\Target.exe

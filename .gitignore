@@ -19,5 +19,15 @@
 *.tar.gz
 *.rar
 
+# Assembly products
+*.obj
+*.exe
+*.o
+
+# middle process
+*_inter.txt
+
+
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
