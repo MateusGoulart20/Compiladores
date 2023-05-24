@@ -6,17 +6,22 @@ import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.ArrayList;
 
 public class Compilador {
-    static private boolean lt = false, ls = false, lse = false, ts = false, nasm = false, inter = false;
+    static private boolean lt = false, ls = false, lse = false, ts = false, nasm = false, inter = false, chefe = false;
     static private ArrayList<Token> tokenList;
 
     public static ArrayList<Token> getTokenList() {
         return tokenList;
     }
+    private static void w(String a){
+        if(chefe)
+            System.out.println(a);
+    }
 
     public static void main(String[] args) {
-        System.out.println("Comando reconhecidos = " + args.length);
+        // Faz o reconhecimento do comando proposto.
+        w("Comando reconhecidos = " + args.length);
         int arquivosReconhecidos = parametrosCompilacao(args);
-        System.out.println("Arquivos fontes reconhecidos = " + arquivosReconhecidos);
+        w("Arquivos fontes reconhecidos = " + arquivosReconhecidos);
 
         if (args.length == 0)
             return;
@@ -30,7 +35,7 @@ public class Compilador {
 
         File arquivoFonte = new File(argumento); // Pega a primeira localização de item.
         if (arquivoFonte.exists()) { // existe portanto executa o código
-            System.out.println("Arquivo Encontrado");
+            w("Arquivo Encontrado");
             try {
                 Scanner myReader = new Scanner(arquivoFonte);
                 int linha = 0;
@@ -43,19 +48,20 @@ public class Compilador {
                     Lexico.analise(data, linha, tokenList);
                 }
 
+                w("### SINTATICO ###");
                 Sintatico.analise(tokenList);
                 myReader.close();
 
                 Sematico.analise(tokenList);
-                if (Sematico.erro) System.out.println("Sematico erro");
+                if (Sematico.erro) System.out.println("Semantico erro");
 
-                System.out.println("### INICIANDO INTERMERDIARIO ###");
+                w("### INTERMERDIARIO ###");
                 try{
                     Intermediario.write(tokenList,argumento);
                 }catch (IOException e){
                     System.out.println("#$# Falha a utilizar arquivo");
                 }
-                System.out.println("### INICIANDO NASM ASSEMBLY ###");
+                w("### NASM ASSEMBLY ###");
                 try{
                     NasmMaker.writeAssembly();
                 }catch (IOException e){
@@ -66,7 +72,7 @@ public class Compilador {
                 System.out.println("File Not Found Exception");
                 e.printStackTrace();
             } finally {
-                System.out.println("##FIM COMPILADOR");
+                w("##FIM COMPILADOR");
             }
         }
     }
@@ -86,6 +92,8 @@ public class Compilador {
                 nasm = true;
             if(argumento.equals("-inter"))
                 inter = true;
+            if(argumento.equals("-chefe"))
+                chefe =true;    
             if (argumento.equals("-tudo")) {
                 lt = true;
                 ls = true;
@@ -93,6 +101,7 @@ public class Compilador {
                 ts = true;
                 inter = true;
                 nasm = true;
+                chefe = true;
             }
 
             if (arquivoExistente(argumento)) {

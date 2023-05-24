@@ -21,48 +21,32 @@ public class Intermediario {
     private static boolean inter;
 
     public static void inter(boolean a){
-        inter = a;
+        inter = a; // ativação de avisos
     }
     public static void w(String a){
-        if(inter)
+        if(inter) // escrita de avisos (redução)
             System.out.println(a);
     }
 
     public static void write(ArrayList<Token> tl, String argument) throws IOException {
+        // aqui trata o nome do arquivo
         archive_name = argument.substring(0, argument.length()-4);
         archive_name += "_inter.txt";
         tokenList = tl;
-        // Gerar as variaveis antes de começar o esquema
+        
+        // Gera as variaveis e os comandos.
         gerar_comandos();
         gerar_variaveis();
-        //try{
-            //Fluxo de saida de um arquivo
-            //OutputStream os =  // nome do arquivo que será escrito
-            //Writer wr = new OutputStreamWriter(new FileOutputStream("file1.txt")); // criação de um escritor
-            BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archive_name))); // adiciono a um escritor de buffer
-            for (String t : constantes) br.write(t+"\n");
-            for (String t : variaveis)  br.write("VAR "+t+"\n");
-            for (String t : comando)    br.write(t+"\n");
-            
-            // Coisas que podem levar um pointer matematico
-            // "=" atribute. -> atribute pointer ponto_virgula
-            // if pointer condicao pointer open C
-            /*br.write("\n");
-            for (Token i : tokenList){
-                br.write(i.lexema);
-                if(i.lexema.equals(";")||i.lexema.equals("{")){
-                    br.write("\n");
-                }else{
-                    br.write(" ");
-                }
-            }*/
-            br.close();
-        //} catch (IOException ioe){
-            //System.out.println("FAIL");
-        //}
-        
+
+        // Escreve tudo que foi gerado
+        BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archive_name))); // adiciono a um escritor de buffer
+        for (String t : constantes) br.write(t+"\n");
+        for (String t : variaveis)  br.write("VAR "+t+"\n");
+        for (String t : comando)    br.write(t+"\n");
+        br.close();
     }
     private static void gerar_comandos(){
+        // Aqui a lista de comandos é divida por comando para que sejam tratados de forma individual
         ArrayList<Token> analise = new ArrayList<Token>();
         for(Token t : tokenList){
             switch (t.lexema) {
@@ -81,6 +65,7 @@ public class Intermediario {
         }
     }
     private static void command(List<Token> expressao){
+        // Aqui converte os comandos da linguagem para expressões de fomra intermediária
         List<Token> esquerda, direita;
         int v;
         switch (expressao.get(0).token){
@@ -171,6 +156,7 @@ public class Intermediario {
             }
     }
     private static void resolver_expressao(String t, List<Token> expressao){
+        // A aqui uma expressão aritmetica é reduzida e posta onde foi solicitado
         int index = 0, operation=0;
         w("Resolver expressao: ");
         while(true){
@@ -194,6 +180,9 @@ public class Intermediario {
     }
 
     private static List<Token> suprimir(List<Token> expressao, int posi, int aux){
+        /* Esse método tem como objetivo diminuir o tamanho de uma expressão aritmética substituindo
+         * operações básicas por novas variaveis transitórias com o intuito de reduzir a apenas uma variavel
+         */
         Token auxiliar = new Token("aux", "aux"+aux); auxiliar.coluna=0;
         if(expressao.get(posi).lexema.equals("+")){
             comando.add("SOMA "+auxiliar.lexema+" "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
@@ -208,7 +197,7 @@ public class Intermediario {
             comando.add("DIVD "+auxiliar.lexema+" "+expressao.get(posi-1).lexema+" "+expressao.get(posi+1).lexema);
         }
         //System.out.println(expressao);
-        // depois de qualquer operacao
+        // depois de qualquer operacao fazendo a redução da expressao em 2.
         expressao.set(posi-1, auxiliar);
         expressao.remove(posi);
         expressao.remove(posi);
@@ -216,6 +205,7 @@ public class Intermediario {
     }
 
     private static int maior_prioridade(List<Token> expressao){
+        // Aqui tem como intuito descobrir quem deve ser substuido primeiro na expressão aritmética 
         int prioridade=0, maior_prioridade=0, index=0;
         Token t;
         for (int i=0; i<expressao.size() ; i++){
@@ -245,6 +235,7 @@ public class Intermediario {
     }
 
     private static List<Token> desparentizar(List<Token> expressao){
+        // Aqui tem como objetivo, retirar parenteses desnecessários.
         Token t;
         //System.out.print(" : ");
         //if(expressao.size() > 2)
@@ -264,7 +255,9 @@ public class Intermediario {
         return expressao;
     }
 
-    private static void gerar_variaveis(){ // posiciona todas as variaveis a serem usadas.
+    private static void gerar_variaveis(){ 
+        // posiciona todas as variaveis a serem usadas.
+        // faz uma busca nas funções que usam variaveis e verifica onde precisará de auxiliar
         int cont_if = 1, cont_while = 1, cont_text = 1; 
         boolean state = false, if_while = false, txt = false; // false - if, true - while
         String tex = "";
