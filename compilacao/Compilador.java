@@ -52,6 +52,7 @@ public class Compilador {
                 Sintatico.analise(tokenList);
                 myReader.close();
 
+                w("### SEMATICO ###");
                 Sematico.analise(tokenList);
                 if (Sematico.erro) System.out.println("Semantico erro");
 

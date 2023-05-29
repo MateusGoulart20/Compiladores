@@ -21,7 +21,8 @@ public class Sematico {
             System.out.println(entrada);
     }
     public static void wTS(String entrada) { // escreve o log
-        System.out.println(entrada);
+        if(ts)
+            System.out.println(entrada);
     }
 
     private static boolean usando_declarando = false;// false -> declarado ; true -> usando
